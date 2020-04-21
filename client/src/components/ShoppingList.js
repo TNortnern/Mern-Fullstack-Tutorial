@@ -6,7 +6,9 @@ import { getItems,deleteItem } from "../actions/itemActions";
 
 const ShoppingList = () => {
     useEffect(() => {
+      if (!items.length) {
         dispatch(getItems())
+      }
     })
   const items = useSelector(state => state.item.items);
   const dispatch = useDispatch();
