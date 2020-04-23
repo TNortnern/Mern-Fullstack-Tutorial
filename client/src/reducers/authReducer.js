@@ -33,9 +33,10 @@ export default function(state = initialState, { type, payload }) {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
+      localStorage.setItem('token', payload.token)
       return {
         ...state,
-        payload,
+        ...payload,
         isAuthenticated: true,
         isLoading: false
       };
@@ -43,6 +44,7 @@ export default function(state = initialState, { type, payload }) {
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
+      localStorage.removeItem('token')
       return {
         ...state,
         token: null,
