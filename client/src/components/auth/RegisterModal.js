@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -23,26 +23,28 @@ const RegisterModal = () => {
   const [msg, setMsg] = useState(null);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const error = useSelector((state) => state.error);
+  const dispatch = useDispatch();
+
+   const handleToggle = useCallback(() => {
+     // Clear errors
+     dispatch(clearErrors());
+     setModal(!modal);
+   }, [modal, dispatch]);
 
   useEffect(() => {
-    setMsg(null);
-    if (error && error.id) {
-      if (error.id === "REGISTER_FAIL") {
-        setMsg(error.msg.msg);
-      } else {
-      }
-    }
-  }, [error]);
-
-  useEffect(() => {
+     setMsg(null);
+     if (error && error.id) {
+       if (error.id === "REGISTER_FAIL") {
+         setMsg(error.msg.msg);
+       } else {
+       }
+     }
     if (modal) {
       if (isAuthenticated) {
-        toggle();
+        handleToggle()
       }
     }
-  }, [isAuthenticated]);
-
-  const dispatch = useDispatch();
+  }, [error, handleToggle, isAuthenticated, modal]);
   const onSubmit = (e) => {
     e.preventDefault();
     const user = {
@@ -52,19 +54,14 @@ const RegisterModal = () => {
     };
     // Attempt to register
     dispatch(register(user));
-    // toggle();
-  };
-  const toggle = () => {
-    setModal(!modal);
-    dispatch(clearErrors());
   };
   return (
     <div>
-      <NavLink onClick={toggle} href="#">
+      <NavLink onClick={handleToggle} href="#">
         Register
       </NavLink>
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Register</ModalHeader>
+      <Modal isOpen={modal} toggle={handleToggle}>
+        <ModalHeader toggle={handleToggle}>Register</ModalHeader>
         <ModalBody>
           {msg ? <Alert color="danger">{msg}</Alert> : null}
           <Form onSubmit={onSubmit}>

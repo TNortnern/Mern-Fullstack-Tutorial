@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -22,6 +22,13 @@ const LoginModal = () => {
   const [msg, setMsg] = useState(null);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const error = useSelector((state) => state.error);
+  const dispatch = useDispatch();
+
+  const toggle = useCallback(() => {
+    // Clear errors
+    dispatch(clearErrors());
+    setModal(!modal);
+  }, [modal, dispatch]);
 
   useEffect(() => {
     setMsg(null);
@@ -31,29 +38,24 @@ const LoginModal = () => {
       } else {
       }
     }
-  }, [error]);
-
-  useEffect(() => {
     if (modal) {
       if (isAuthenticated) {
         toggle();
       }
     }
-  }, [isAuthenticated]);
-
-  const dispatch = useDispatch();
+  }, [isAuthenticated, modal, error, toggle]);
   const onSubmit = (e) => {
     e.preventDefault();
-   
-  };
-  const toggle = () => {
-    setModal(!modal);
-    dispatch(clearErrors());
+     const user = {
+       email,
+       password,
+     };
+    dispatch(login(user))
   };
   return (
     <div>
       <NavLink onClick={toggle} href="#">
-        Register
+        Login
       </NavLink>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Register</ModalHeader>
@@ -61,17 +63,6 @@ const LoginModal = () => {
           {msg ? <Alert color="danger">{msg}</Alert> : null}
           <Form onSubmit={onSubmit}>
             <FormGroup>
-              <Label for="name">Name</Label>
-              <Input
-                type="text"
-                name="name"
-                id="item"
-                placeholder="Name"
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                value={name}
-              />
               <Label for="email">Email</Label>
               <Input
                 type="email"
@@ -96,7 +87,7 @@ const LoginModal = () => {
               />
             </FormGroup>
             <Button color="dark" style={{ marginTop: "2rem" }} block>
-              Register
+              Login
             </Button>
           </Form>
         </ModalBody>

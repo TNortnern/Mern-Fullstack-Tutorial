@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux'
 import { logout } from '../../actions/authActions'
 import { NavLink } from 'reactstrap';
