@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://tnorthern:path7852@mernshoppinglist-yhiqz.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://tnorthern:12345@mernshoppinglist-yhiqz.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "sl_myJwtSecret"
 }
